@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { SearchBar } from 'antd-mobile'
+import GoodsList from '../GoodsList/GoodsList'
 class Home extends Component {
   render() {
     return (
@@ -8,7 +9,7 @@ class Home extends Component {
           placeholder="Search"
           onFocus={() => this.props.history.push('/search')}
         />
-        goodsKind
+        <GoodsList></GoodsList>
       </div>
     );
   }
