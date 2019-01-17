@@ -7,7 +7,6 @@ class TabBarLink extends Component{
   render(){
     const navList = this.props.data
     const {pathname} = this.props.location
-    console.log(navList,pathname)
     return(
       <div> 
         <TabBar
