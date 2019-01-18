@@ -48,6 +48,7 @@
     "react-dom": "^16.7.0",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
+    "react-sticky": "^6.0.3",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "resolve": "1.8.1",
@@ -138,5 +139,5 @@
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.1.2"
   },
-  "proxy": "https://zhishun520.com"
+  "proxy": "https://zhishun520.com/toutiaotv-api-home-1.0.0/"
 }

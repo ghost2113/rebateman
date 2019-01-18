@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { SearchBar } from 'antd-mobile'
-import GoodsList from '../GoodsList/GoodsList'
+import GoodsTabBar from '../GoodsTabBar/GoodsTabBar'
 class Home extends Component {
   render() {
     return (
@@ -9,7 +9,7 @@ class Home extends Component {
           placeholder="Search"
           onFocus={() => this.props.history.push('/search')}
         />
-        <GoodsList></GoodsList>
+        <GoodsTabBar></GoodsTabBar>
       </div>
     );
   }

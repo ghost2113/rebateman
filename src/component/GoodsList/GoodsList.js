@@ -1,46 +1,71 @@
 import React, { Component } from 'react';
-import ReactDOM from "react-dom";
-import { connect } from "react-redux";
+import ReactDOM from "react-dom"
 import axios from 'axios';
 import { ListView,PullToRefresh } from 'antd-mobile';
-import goodsList, {getData} from '../../redux/GoodsList.redux'
 
-let pageNo = 1;
-@connect(
-  state=>goodsList,
-  {getData}
-)
+const NUM_ROWS = 20;
+let pageIndex = 1;
 class GoodsList extends Component {
   constructor(props) {
     super(props);
     const dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-
     this.state = {
+      dataBlob:[],
       dataSource,
+      hasMore:true,
       refreshing: true,
       isLoading: true,
       height: document.documentElement.clientHeight,
-      useBodyScroll: true,
+      useBodyScroll: true
     };
-
-  this.genData = this.genData.bind(this);
-    
+    this.getData = this.getData.bind(this);
   }
-  genData(){
-    this.props.getData(pageNo);
+  getData() {
+    axios({
+      url: 'professional/product/list',
+      method: 'get', // 默认是 get9			  
+      baseURL:'https://zhishun520.com/toutiaotv-api-home-1.0.0/',
+      params:{
+        userId:1265,
+        pageSize:15,
+        random:Math.random(),
+        pageNo:pageIndex
+      }
+    })
+    .then((res)=>{
+      console.log(res)
+      const LENGTH_DATA = res.data.data.length;
+      if(LENGTH_DATA>0){
+        let data = [...this.state.dataBlob,...res.data.data];
+        pageIndex++;
+        this.setState({
+          dataBlob:[...this.state.dataBlob,...res.data.data],
+          dataSource: this.state.dataSource.cloneWithRows(data),
+          hasMore:true,
+          isLoading:false,
+          indexPage:pageIndex
+        })
+      }else{
+        this.setState({
+          hasMore:false,
+          isLoading:false
+        })
+      }
+      
+    })
+    .catch((error)=>{
+        console.log(error)
+    })
   }
-  //If you use redux, the data maybe at props, you need use `componentWillReceiveProps`
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.goodsList.dataSource !== this.props.goodsList.dataSource) {
-      this.setState({
-        dataBlob:nextProps.goodsList.dataSource,
-        refreshing: false,
-        isLoading: false,
-        dataSource: this.state.dataSource.cloneWithRows(nextProps.goodsList.dataSource),
-      });
-    }
+  componentDidMount() {
+    const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
+    this.setState({
+      isLoading: true,
+      height:hei
+    });
+    this.getData();
   }
   componentDidUpdate() {
     if (this.state.useBodyScroll) {
@@ -49,24 +74,44 @@ class GoodsList extends Component {
       document.body.style.overflow = 'hidden';
     }
   }
-  componentDidMount() {  
-    const hei = this.state.height - ReactDOM.findDOMNode(this.lv).offsetTop;
-   this.setState({
-     height:hei
-   })
-    this.genData();    
-  }  
-  onRefresh = () => {
-    this.setState({ refreshing: true, isLoading: true })
-    this.props.getData(1);
-
-  };
   onEndReached = (event) => {
-    this.setState({ isLoading: true });
-    this.props.getData(pageNo);
+    this.setState({ isLoading: true })
+
+    if (this.state.loading&&!this.state.hasMore) {
+      return;
+    };
+    this.getData(pageIndex);
   }
-  render(){   
-    console.log(this.state.dataSource);
+  onRefresh = () => {
+    this.setState({ 
+      refreshing: true, 
+      isLoading: true,      
+    });
+    axios({
+      url: 'professional/product/list',
+      method: 'get', // 默认是 get9			  
+      baseURL:'https://zhishun520.com/toutiaotv-api-home-1.0.0/',
+      params:{
+        userId:1265,
+        pageSize:15,
+        random:Math.random(),
+        pageNo:1
+      }
+    })
+    .then((res)=>{
+      const data = [...res.data.data];
+      this.setState({
+        dataBlob:[...res.data.data],
+        dataSource: this.state.dataSource.cloneWithRows(data),
+        isLoading:false,
+        refreshing:false,
+        })
+    })
+    .catch((error)=>{
+        console.log(error)
+    })
+  }
+  render() {
     const row = (rowData, sectionID, rowID) => {
       return (
         <div key={rowID} style={{ padding: '0 15px' }}>
@@ -77,42 +122,37 @@ class GoodsList extends Component {
               fontSize: 18,
               borderBottom: '1px solid #F6F6F6',
             }}
-          >{'tian'}</div>    
-           <div
-            style={{
-              lineHeight: '50px',
-              color: '#888',
-              fontSize: 18,
-              borderBottom: '1px solid #F6F6F6',
-            }}
           >{'tian'}</div>        
-          v    
         </div>
       );
     };
     return (
       <ListView
         ref={el => this.lv = el}
-        dataSource={this.state.dataSource}//渲染的数据源
-        renderFooter={() => (<div style={{ padding: 20, textAlign: 'center' }}>
-          {this.state.isLoading ? '加载中...' : '加载完毕'}
+        dataSource={this.state.dataSource}
+        renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
+          {this.state.isLoading ? 'Loading...' : '--Loaded--'}
         </div>)}
-        renderRow={row}//单条数据
-        className="am-list"
-        pageSize={15}//每次渲染的条数
-        useBodyScroll
-        scrollRenderAheadDistance={500}//当一个行接近屏幕范围多少像素之内，就开始渲染这一行
-        pullToRefresh={<PullToRefresh
-          refreshing={this.state.refreshing}
-          onRefresh={this.onRefresh}
-          damping = {200}
-        />}
-        scrollRenderAheadDistance={20}//控制在滚动过程中，scroll时间被调用的频率
+        refreshing={this.state.refreshing}//是否显示更新状态
+        renderRow={row}
+        className="am-list goods-container"
+        pageSize={4}
+        useBodyScroll={true}
+        scrollRenderAheadDistance={500}
         onEndReached={this.onEndReached}
-        onEndReachedThreshold={15}//调用onEndReached事件临界值
-      />   
-      
+        pullToRefresh={
+          <PullToRefresh 
+            indicator={{ deactivate: '下拉可以刷新' }}
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}>
+        ))}
+           
+          </PullToRefresh>}
+        onEndReachedThreshold={10}
+      />
     );
   }
 }
+
+
 export default GoodsList;
