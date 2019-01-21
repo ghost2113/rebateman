@@ -137,7 +137,8 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.1.2"
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "node-sass": "^4.11.0"
   },
   "proxy": "https://zhishun520.com/toutiaotv-api-home-1.0.0/"
 }

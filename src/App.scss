@@ -1,0 +1,129 @@
+@charset "utf-8";
+*{
+    margin:0;
+    padding:0;
+}
+/* flex布局 */
+@mixin flex($direction, $justify:center, $alignItems:center) {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: $direction;
+    justify-content: $justify;
+    align-items: $alignItems;
+}
+
+/* 字体样式 */
+@mixin font($size:14px, $weight:500, $family:"微软雅黑", $height:1.4, $color:#000) {
+    font-size: $size;
+    font-weight: $weight;
+    font-family: $family;
+    line-height: $height;
+    color: $color;
+}
+
+/* 多行文本溢出 */
+@mixin overflow($num:1) {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $num;
+    overflow: hidden;
+}
+$themeColor:#FF2735;
+/* 导航栏 */
+.am-tab-bar{
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height:auto;
+}
+/* 搜索框 */
+.am-search-input{
+  border-radius:14px;
+}
+/*标签栏*/
+.am-tabs-default-bar-tab{
+	height:30px;
+	line-height: 30px;
+}
+/*loading*/
+.am-list-footer{
+    width:100%;
+}
+.am-list-body{
+    overflow:hidden;
+}
+.list-view-section-body{
+    
+    .goods-item{
+            float:left;
+            width:47%;
+            margin:0 0 2% 2%;
+            height:2.8rem;
+            background:white;
+            background-size:100% auto;
+            background-position:center center;
+            background-repeat: no-repeat;
+            dt{
+                height:1.75rem;
+                background:url("./img/default.png") no-repeat center center;
+                background-size:100% auto;
+                img{
+                    display:block;
+                    width:100%;
+                    height:100%;
+                }
+            }
+            dd{
+                width:100%;
+                padding:0.05rem 0.05rem;
+                margin:0;
+                .title{
+                    @include overflow(2); 
+                    text-indent: 0.14rem;
+                    line-height: 0.2rem;
+                    height:0.4rem;
+                    background:url("./img/type_taobaol_icon.png") no-repeat left 0.03rem;
+                    background-size:0.14rem 0.14rem;                   
+                }
+                .dd2{
+                    @include flex(row,space-between,center);
+                    font-size:0.1rem;
+                    padding:0.08rem 0 0.05rem;
+                    .coupon{
+                        width:0.48rem;
+                        height:0.2rem;
+                        text-align:center;
+                        line-height:0.2rem;
+                        color:#fff;
+                        background:url("./img/youhuiquan.png") no-repeat center center;
+                        background-size:100% 100%;
+                    }
+                    .rebate{
+                        color:$themeColor;
+                        font-weight: 600;
+                    }                   
+                }
+                .dd3{                   
+                    font-size:0.1rem;
+                    color:#9E9E9E;
+                     @include flex(row,space-between,flex-end);
+                     .dd3-wrap{
+                         @include flex(row,flex-start,flex-end);
+                         .price{
+                             font-size:0.15rem;
+                             color:$themeColor;
+                             font-weight: 600;
+                         }
+                         .itemPrice{
+                             margin-left:1px;
+                            text-decoration: line-through;
+                         }
+                     }
+                }
+            }
+        }
+}
+/*商品上拉加载下拉刷新*/
+.am-list-view-scrollview{
+	width:100%;
+}

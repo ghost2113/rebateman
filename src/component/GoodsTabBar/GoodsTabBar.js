@@ -12,6 +12,7 @@ class GoodsTabBar extends Component {
       tabData:[]
     }
     this.getData = this.getData.bind(this)
+    this.changeGoodType = this.changeGoodType.bind(this)
   }
   getData() {
     axios({
@@ -32,6 +33,9 @@ class GoodsTabBar extends Component {
         console.log(error)
     })
   }
+  changeGoodType(tabData,index){
+    console.log(tabData)
+  }
   componentDidMount(){
     this.getData();
   }
@@ -51,6 +55,7 @@ class GoodsTabBar extends Component {
           tabBarUnderlineStyle={{border:"1px solid #FB2E3C"}}
           useOnPan={false}
           usePaged={true}
+          onTabClick={this.changeGoodType}
         >
           {tabData.map((item,index)=>{
             return (

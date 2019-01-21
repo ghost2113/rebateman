@@ -9,7 +9,8 @@ import AuthRoute from './component/AuthRoute/AuthRoute'
 import Dashboard from './component/Dashboard/Dashboard'
 import Search from './component/Search/Search'
 //import './config'
-import './App.css'
+import './App.scss'
+import './rem.js'
 
 
 const store = createStore(reducers, compose(
