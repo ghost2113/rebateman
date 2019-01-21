@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import {connect} from 'react-redux'
 import { TabBar } from "antd-mobile"
 import {withRouter} from 'react-router-dom'
 @withRouter

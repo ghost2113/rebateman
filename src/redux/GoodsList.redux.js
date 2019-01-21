@@ -1,5 +1,8 @@
 const GOODS_TYPE = 'GOODS_TYPE';
 const initState={
+	type:"",
+	api:"",
+	keyword:"",
 	goodsType:'推荐'
 }
 
@@ -12,14 +15,11 @@ export default function goodsType(state=initState, action){
 			return state
 	}
 } 
-function loadData(data,pageNo){
-	return {type: LOAD_DATA, payload:data, pageNo:pageNo}
+function goodstype(api,keyword,goodstype){
+	return {type: GOODS_TYPE, api:api,keyword:keyword goodstype:goodstype}
 }
-export function getData(goodsType,keyword){
-	let api = "professional/product/list" ;
-	let keyword = "";
-	switch(goodsType){
-		case "推荐":
-			dispatch();
-	}
-}
+export function getTabData(keyword="",goodstype=""){
+	let apiArr = ["professional/product/list","professional/product/list"] ;
+	let keyword = ""; 
+	let api = keyword=""?apiArr[0]:apiArr[1];
+	dispatch(goodstype(api,keyword,goodstype))

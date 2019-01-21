@@ -1,10 +1,16 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import {connect} from "react-redux";
 import axios from "axios";
 import { ListView, PullToRefresh } from "antd-mobile";
+import {getTabData} from "../../redux/GoodsList.redux"
 import DefaultImg from "../../img/default.png";
-const NUM_ROWS = 20;
+const pageSize = 20;
 let pageIndex = 1;
+@connect(
+  state=>state.goodstype,
+  {getTabData}
+)
 class GoodsList extends Component {
   constructor(props) {
     super(props);
